@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UtilisateurRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: UtilisateurRepository::class)]
@@ -14,7 +16,7 @@ class Utilisateur
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
-    #[Assert\]
+//    #[Assert\]
     private ?string $pseudo = null;
 
     #[ORM\Column(length: 100)]
@@ -46,6 +48,24 @@ class Utilisateur
 
     #[ORM\Column(nullable: true)]
     private ?bool $administrateur = null;
+
+    /**
+     * @var Collection<int, Enchere>
+     */
+    #[ORM\OneToMany(targetEntity: Enchere::class, mappedBy: 'utilisateur')]
+    private Collection $encheres;
+
+    /**
+     * @var Collection<int, ArticleVendu>
+     */
+    #[ORM\OneToMany(targetEntity: ArticleVendu::class, mappedBy: 'utilisateur')]
+    private Collection $articleVendus;
+
+    public function __construct()
+    {
+        $this->encheres = new ArrayCollection();
+        $this->articleVendus = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -180,6 +200,66 @@ class Utilisateur
     public function setAdministrateur(?bool $administrateur): static
     {
         $this->administrateur = $administrateur;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Enchere>
+     */
+    public function getEncheres(): Collection
+    {
+        return $this->encheres;
+    }
+
+    public function addEnchere(Enchere $enchere): static
+    {
+        if (!$this->encheres->contains($enchere)) {
+            $this->encheres->add($enchere);
+            $enchere->setUtilisateur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEnchere(Enchere $enchere): static
+    {
+        if ($this->encheres->removeElement($enchere)) {
+            // set the owning side to null (unless already changed)
+            if ($enchere->getUtilisateur() === $this) {
+                $enchere->setUtilisateur(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ArticleVendu>
+     */
+    public function getArticleVendus(): Collection
+    {
+        return $this->articleVendus;
+    }
+
+    public function addArticleVendu(ArticleVendu $articleVendu): static
+    {
+        if (!$this->articleVendus->contains($articleVendu)) {
+            $this->articleVendus->add($articleVendu);
+            $articleVendu->setUtilisateur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeArticleVendu(ArticleVendu $articleVendu): static
+    {
+        if ($this->articleVendus->removeElement($articleVendu)) {
+            // set the owning side to null (unless already changed)
+            if ($articleVendu->getUtilisateur() === $this) {
+                $articleVendu->setUtilisateur(null);
+            }
+        }
 
         return $this;
     }
