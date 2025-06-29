@@ -55,16 +55,42 @@ class Utilisateur
     #[ORM\OneToMany(targetEntity: Enchere::class, mappedBy: 'utilisateur')]
     private Collection $encheres;
 
-    /**
-     * @var Collection<int, ArticleVendu>
-     */
-    #[ORM\OneToMany(targetEntity: ArticleVendu::class, mappedBy: 'utilisateur')]
-    private Collection $articleVendus;
+    #[ORM\OneToMany(targetEntity: ArticleVendu::class, mappedBy: 'utilisateur', orphanRemoval: true)]
+    private Collection $articles;
 
     public function __construct()
     {
-        $this->encheres = new ArrayCollection();
-        $this->articleVendus = new ArrayCollection();
+        $this->articles = new ArrayCollection();
+    }
+
+    /**
+     * @return Collection<int, ArticleVendu>
+     */
+    public function getArticles(): Collection
+    {
+        return $this->articles;
+    }
+
+    public function addArticle(ArticleVendu $article): self
+    {
+        if (!$this->articles->contains($article)) {
+            $this->articles[] = $article;
+            $article->setUtilisateur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeArticle(ArticleVendu $article): self
+    {
+        if ($this->articles->removeElement($article)) {
+            // set the owning side to null (unless already changed)
+            if ($article->getUtilisateur() === $this) {
+                $article->setUtilisateur(null);
+            }
+        }
+
+        return $this;
     }
 
     public function getId(): ?int
@@ -234,33 +260,4 @@ class Utilisateur
         return $this;
     }
 
-    /**
-     * @return Collection<int, ArticleVendu>
-     */
-    public function getArticleVendus(): Collection
-    {
-        return $this->articleVendus;
-    }
-
-    public function addArticleVendu(ArticleVendu $articleVendu): static
-    {
-        if (!$this->articleVendus->contains($articleVendu)) {
-            $this->articleVendus->add($articleVendu);
-            $articleVendu->setUtilisateur($this);
-        }
-
-        return $this;
-    }
-
-    public function removeArticleVendu(ArticleVendu $articleVendu): static
-    {
-        if ($this->articleVendus->removeElement($articleVendu)) {
-            // set the owning side to null (unless already changed)
-            if ($articleVendu->getUtilisateur() === $this) {
-                $articleVendu->setUtilisateur(null);
-            }
-        }
-
-        return $this;
-    }
 }

@@ -1,30 +1,30 @@
 <?php
-
+// src/Repository/UtilisateurRepository.php
 namespace App\Repository;
-class UtilisateurRepository
-{
-    //    /**
-    //     * @return Utilisateur[] Returns an array of Utilisateur objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('u')
-    //            ->andWhere('u.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('u.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
 
-    //    public function findOneBySomeField($value): ?Utilisateur
-    //    {
-    //        return $this->createQueryBuilder('u')
-    //            ->andWhere('u.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+use App\Entity\Utilisateur;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
+
+class UtilisateurRepository extends ServiceEntityRepository
+{
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, Utilisateur::class);
+    }
+
+    public function findByPseudo(string $pseudo): ?Utilisateur
+    {
+        return $this->findOneBy(['pseudo' => $pseudo]);
+    }
+
+    public function existsByPseudo(string $pseudo): bool
+    {
+        return $this->count(['pseudo' => $pseudo]) > 0;
+    }
+
+    public function existsByEmail(string $email): bool
+    {
+        return $this->count(['email' => $email]) > 0;
+    }
 }

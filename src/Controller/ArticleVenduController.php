@@ -6,6 +6,7 @@ use App\Entity\ArticleVendu;
 use App\Form\ArticleVenduTypeForm;
 use App\Repository\ArticleVenduRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,7 +18,7 @@ final class ArticleVenduController extends AbstractController
     #[Route('/', name: 'app_articlevendu_index', methods: ['GET'])]
     public function index(ArticleVenduRepository $articleVenduRepository): Response
     {
-        return $this->render('articles/index.html.twig', [
+        return $this->render('article/index.html.twig', [
             'articles' => $articleVenduRepository->findAll()
         ]);
     }
@@ -41,11 +42,11 @@ final class ArticleVenduController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_articlevendu_show', methods: ['GET'])]
-    public function show(ArticleVendu $articleVendu)
+    #[Route('/{id}', name: 'article_show', methods: ['GET'])]
+    public function show(#[MapEntity(mapping: ['id' => 'noArticle'])] ArticleVendu $article): Response
     {
         return $this->render('article/show.html.twig', [
-            'article' => $articleVendu
+            'article' => $article
         ]);
     }
 
