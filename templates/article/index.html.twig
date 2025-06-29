@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des Article{% endblock %}
+
+{% block body %}
+    <h1>Article en ventes</h1>
+    <a href="{{ path('app_articlevendu_new') }}" class="btn btn-success">+ Nouvel Article</a>
+    <ul>
+    {% for articles in articles %}
+        <li>
+            <a href="{{ path('app_articlevendu_show', {'id': article.noArticle}) }}">
+                {{ article.nomArticle }} - {{ article.prixInitial }}
+            </a>
+        </li>
+    {% else %}
+        <li>
+            Aucun article.
+        </li>
+        </ul>
+    {% endfor %}
+    <a href="{{ path('app_articlevendu_index') }}">← Retour</a>
+{% endblock %}
