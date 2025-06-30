@@ -13,7 +13,7 @@ class ArticleVendu
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(type: 'integer')] // ← ⚠️ important !
     private ?int $noArticle = null;
 
     #[ORM\ManyToOne(inversedBy: 'articles')]

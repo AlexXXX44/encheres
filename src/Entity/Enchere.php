@@ -24,7 +24,7 @@ class Enchere
     private ?Utilisateur $utilisateur;
 
     #[ORM\ManyToOne(inversedBy: 'encheres')]
-    #[ORM\JoinColumn(nullable: 'false')]
+    #[ORM\JoinColumn(name: "article_id", referencedColumnName: "noArticle", nullable: false)]
     private ?ArticleVendu $article;
 
     public function getId(): ?int
