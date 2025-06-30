@@ -14,7 +14,7 @@ class ArticleVendu
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $id = null;
+    private ?int $noArticle = null;
 
     #[ORM\ManyToOne(inversedBy: 'articles')]
     #[ORM\JoinColumn(nullable: false)]
@@ -28,9 +28,6 @@ class ArticleVendu
      */
     #[ORM\OneToMany(targetEntity: Enchere::class, mappedBy: 'article', cascade: ['remove'])]
     private Collection $encheres;
-
-    #[ORM\Column]
-    private ?int $noArticle = null;
 
     #[ORM\Column(length: 255)]
     private ?string $nomArticle = null;
@@ -60,11 +57,6 @@ class ArticleVendu
     public function __construct()
     {
         $this->encheres = new ArrayCollection();
-    }
-
-    public function getId(): ?int
-    {
-        return $this->id;
     }
 
     public function getCategorie(): ?Categorie
