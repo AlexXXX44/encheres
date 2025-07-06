@@ -23,11 +23,6 @@ class Retrait
     #[ORM\Column(length: 10)]
     private ?string $codePostal = null;
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
     public function getRue(): ?string
     {
         return $this->rue;
