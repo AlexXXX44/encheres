@@ -10,9 +10,9 @@ use Doctrine\ORM\Mapping as ORM;
 class Retrait
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    #[ORM\OneToOne(targetEntity: ArticleVendu::class, inversedBy: 'retrait')]
+    #[ORM\JoinColumn(name: 'article_id', referencedColumnName: 'noArticle', nullable: false)]
+    private ?ArticleVendu $article = null;
 
     #[ORM\Column(length: 255)]
     private ?string $rue = null;
@@ -22,10 +22,6 @@ class Retrait
 
     #[ORM\Column(length: 10)]
     private ?string $codePostal = null;
-
-    #[ORM\OneToOne(targetEntity: ArticleVendu::class, inversedBy: 'retrait')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ArticleVendu $article;
 
     public function getId(): ?int
     {
